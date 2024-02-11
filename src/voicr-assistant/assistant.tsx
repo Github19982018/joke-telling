@@ -2,11 +2,10 @@ import {useRef, useEffect, useMemo} from 'react'
 
 
 export const Assistant = ( {text}:{text:string} ) => {
-    const synth =  window.speechSynthesis;
-    const voices = useRef<Array<object> | null>();
-    const voice = useRef(null);
-
-        useMemo(() => {
+  const voices = useRef<Array<object> | null>();
+  const voice = useRef(null);
+  
+            const synth =  window.speechSynthesis;
             console.log('synth');
             voices.current = synth.getVoices().sort(function (a, b) {
             const aname = a.name.toUpperCase();
@@ -19,7 +18,6 @@ export const Assistant = ( {text}:{text:string} ) => {
             } else {
               return +1;
             }})
-        },[synth])
         
         
         
