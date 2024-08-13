@@ -11,7 +11,7 @@ function App() {
   const category = useRef('Any')
   let url = BaseURL
   const para = useRef([])
-  const getval = useRef({})
+  const getval = useRef({type:[]})
 
   useEffect(() => {
     const keyHandler = (e) => {
@@ -99,6 +99,15 @@ function App() {
              </fieldset>
           </div>)}
         </fieldset>
+        <label htmlFor="">type</label>
+        <input onChange={(e)=>{if(e.target.checked)getval.current.type.push('singlepart')
+                else getval.current.type.splice(getval.current.type.indexOf('singlepart '),1)
+               }} type="checkbox" name="type" />
+              <label htmlFor="programming">single</label>
+              <input onChange={(e)=>{if(e.target.checked)getval.current.type.push('twopart')
+                else getval.current.type.splice(getval.current.type.indexOf('twopart'),1)
+              }} type="checkbox" name="categories" id='Misc'  />
+              <label htmlFor="Misc">two</label><br />
         <label htmlFor="">Number of jokes</label>
         <input type="number" min={1} max={20} onChange={(e)=>{getval.current.amount = e.target.value}}/>
         <button onClick={(e)=>submitHandler(e)} type="submit">Tell me a joke</button>
