@@ -7,19 +7,13 @@ const BaseURL = 'https://v2.jokeapi.dev/joke/Any';
 
 function App() {
   const [text, setText] = useState(''); 
+  const [showAny,setShowAny] = useState(false)
 
   useEffect(() => {
     const keyHandler = (e) => {
         e.preventDefault();
         if (e.key == 'j') {
-          axios.get(BaseURL).then((response) => {
-            console.log(response.data.setup)
-            console.log(response.data.delivery)
-            const joke = JSON.stringify(response.data.setup) + "\n" +JSON.stringify(response.data.delivery);
-            setText(joke);
-          }).catch((error) => {
-           console.log(error);
-          })
+          access()
         }
     }
       document.addEventListener('keydown', (e) => keyHandler(e))
@@ -28,16 +22,20 @@ function App() {
       };
     },[])
 
+  const access = function(){
+    axios.get(BaseURL).then((response) => {
+      console.log(response.data.setup)
+      console.log(response.data.delivery)
+      const joke = JSON.stringify(response.data.setup) + "\n" +JSON.stringify(response.data.delivery);
+      setText(joke);
+    }).catch((error) => {
+     console.log(error);
+    })}
   
-  const submitHandler = () => {
-       axios.get(BaseURL).then((response) => {
-         console.log(response.data.setup)
-         console.log(response.data.delivery)
-         const joke = JSON.stringify(response.data.setup) + "\n" +JSON.stringify(response.data.delivery);
-         setText(joke);
-       }).catch((error) => {
-        console.log(error);
-       })
+  
+  const submitHandler = (e) => {
+       e.preventDefault();
+       access()
   }
 
   return (
@@ -53,13 +51,14 @@ function App() {
           <option value="fr">FRENCH</option>
           <option value="pt">PORTUGEESE</option>
         </select>
+        <br />
         <label htmlFor="checkbox">Select a category or categories</label>
         <fieldset>
-          <input type="radio" name="category" id="any" />
+          <input type="radio" name="category" id="any"  onChange={()=>{setShowAny(false)}}/>
           <label htmlFor="any">Any</label>
-          <div>
-             <input type="radio" name='category' id='custom' />
-             <label htmlFor="custom">custom:</label>
+          <input type="radio" name='category' id='custom' onChange={()=>{setShowAny(true)}}/>
+          <label htmlFor="custom" >custom</label>
+          {showAny && (<div>
              <fieldset>
               <input disabled type="checkbox" name="categories" id='programming' value={'Programming'} />
               <label htmlFor="programming">Programming</label>
@@ -75,12 +74,10 @@ function App() {
               <input disabled type="checkbox" name="categories" id='Christmas' value={'Christmas'} />
               <label htmlFor="Christmas">Christmas</label>
              </fieldset>
-          </div>
+          </div>)}
         </fieldset>
-        <button onClick={submitHandler} type="button">Tell me a joke</button>
-    </form>
-      
-     
+        <button onClick={(e)=>submitHandler(e)} type="submit">Tell me a joke</button>
+    </form>  
     </>
   )
 }
